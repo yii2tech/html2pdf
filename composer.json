@@ -1,0 +1,30 @@
+{
+    "name": "yii2tech/html2pdf",
+    "description": "Provides support for HTML to PDF and PHP to PDF conversion",
+    "keywords": ["yii2", "html2pdf", "pdf", "convert", "conversion"],
+    "type": "yii2-extension",
+    "license": "BSD-3-Clause",
+    "support": {
+        "issues": "https://github.com/yii2tech/html2pdf/issues",
+        "forum": "http://www.yiiframework.com/forum/",
+        "wiki": "https://github.com/yii2tech/html2pdf/wiki",
+        "source": "https://github.com/yii2tech/html2pdf"
+    },
+    "authors": [
+        {
+            "name": "Paul Klimov",
+            "email": "klimov.paul@gmail.com"
+        }
+    ],
+    "require": {
+        "yiisoft/yii2": "*"
+    },
+    "autoload": {
+        "psr-4": { "yii2tech\\html2pdf\\": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
