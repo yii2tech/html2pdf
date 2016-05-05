@@ -7,10 +7,14 @@
 
 namespace yii2tech\html2pdf\converters;
 
+use yii\base\Exception;
+use yii\helpers\Inflector;
 use yii2tech\html2pdf\BaseConverter;
 
 /**
  * Wkhtmltopdf converts file using [wkhtmltopdf](http://wkhtmltopdf.org/) utility.
+ *
+ * This converter requires `wkhtmltopdf` utility installed and being available via OS shell.
  *
  * @see http://wkhtmltopdf.org/
  *
@@ -32,13 +36,32 @@ class Wkhtmltopdf extends BaseConverter
     protected function convertInternal($sourceFileName, $outputFileName, $options)
     {
         $command = $this->binPath;
-        foreach ($options as $name => $value) {
-            $command .= "--{$name} {$value}";
+        foreach ($this->normalizeOptions($options) as $name => $value) {
+            $command .= " --{$name} {$value}";
         }
-        $command .= escapeshellarg($sourceFileName) . ' ' . escapeshellarg($outputFileName);
+        $command .= ' ' . escapeshellarg($sourceFileName) . ' ' . escapeshellarg($outputFileName);
         $command .= ' 2>&1';
 
         $outputLines = [];
         exec($command, $outputLines, $exitCode);
+
+        if ($exitCode !== 0) {
+            throw new Exception("Unable to convert file '{$sourceFileName}': " . implode("\n", $outputLines));
+        }
+    }
+
+    /**
+     * Normalizes raw conversion options for the shell command composition.
+     * @param array $options raw conversion options
+     * @return array normalized options.
+     */
+    protected function normalizeOptions($options)
+    {
+        $result = [];
+        foreach ($options as $name => $value) {
+            $normalizedName = Inflector::camel2id($name);
+            $result[$normalizedName] = $value;
+        }
+        return $result;
     }
 }
