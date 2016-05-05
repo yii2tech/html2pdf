@@ -11,7 +11,6 @@ use Yii;
 use yii\base\Component;
 use yii\base\Exception;
 use yii\base\InvalidConfigException;
-use yii\base\ViewContextInterface;
 use yii\di\Instance;
 use yii\helpers\FileHelper;
 use yii\web\View;
@@ -21,6 +20,9 @@ use yii2tech\html2pdf\converters\Wkhtmltopdf;
 /**
  * Manager
  *
+ * @see ConverterInterface
+ * @see Template
+ *
  * @property string $viewPath path ro the directory containing view files.
  * @property ConverterInterface|array|string $converter converter instance or its configuration.
  * @property View $view View instance. Note that the type of this property differs in getter and setter. See
@@ -29,7 +31,7 @@ use yii2tech\html2pdf\converters\Wkhtmltopdf;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 1.0
  */
-class Manager extends Component implements ViewContextInterface
+class Manager extends Component
 {
     /**
      * @var string|boolean layout view name. This is the layout used to render HTML source.
@@ -175,10 +177,19 @@ class Manager extends Component implements ViewContextInterface
      */
     public function render($view, $params, $options = [])
     {
-        $htmlContent = $this->renderHtml($view, $params);
+        $template = new Template([
+            'view' => $this->getView(),
+            'viewPath' => $this->getViewPath(),
+            'viewName' => $view,
+            'layout' => $this->layout,
+            'pdfOptions' => $options,
+        ]);
+        $htmlContent = $template->render($params);
+
         $fileName = $this->generateTempFileName('html');
         file_put_contents($fileName, $htmlContent);
-        return $this->convert($fileName, $options);
+
+        return $this->convert($fileName, $template->pdfOptions);
     }
 
     /**
@@ -196,23 +207,6 @@ class Manager extends Component implements ViewContextInterface
             throw new Exception('HTML to PDF conversion failed: no output file created.');
         }
         return new File(['tempName' => $outputFileName]);
-    }
-
-    /**
-     * Renders the specified view with optional parameters and layout.
-     * The view will be rendered using the [[view]] component.
-     * @param string $view the view name or the path alias of the view file.
-     * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
-     * @return string the rendering result.
-     */
-    protected function renderHtml($view, $params)
-    {
-        $output = $this->getView()->render($view, $params, $this);
-        if ($this->layout !== false) {
-            return $this->getView()->render($this->layout, ['content' => $output], $this);
-        } else {
-            return $output;
-        }
     }
 
     /**
