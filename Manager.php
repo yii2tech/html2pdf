@@ -16,6 +16,7 @@ use yii\helpers\FileHelper;
 use yii\web\View;
 use yii2tech\html2pdf\converters\Callback;
 use yii2tech\html2pdf\converters\Dompdf;
+use yii2tech\html2pdf\converters\Mpdf;
 use yii2tech\html2pdf\converters\Wkhtmltopdf;
 
 /**

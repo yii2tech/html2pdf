@@ -13,7 +13,7 @@ use yii2tech\html2pdf\BaseConverter;
 /**
  * Dompdf converts file using [dompdf](https://github.com/dompdf/dompdf) library.
  *
- * This converter requires `dompdf` library to be installed:
+ * This converter requires `dompdf` library to be installed. This can be done via composer:
  *
  * ```
  * composer require --prefer-dist dompdf/dompdf:0.7.x@beta
