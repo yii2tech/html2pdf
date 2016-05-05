@@ -1,7 +1,7 @@
 {
     "name": "yii2tech/html2pdf",
     "description": "Provides support for HTML to PDF and PHP to PDF conversion",
-    "keywords": ["yii2", "html2pdf", "pdf", "convert", "conversion"],
+    "keywords": ["yii2", "html2pdf", "php2pdf", "pdf", "convert", "conversion"],
     "type": "yii2-extension",
     "license": "BSD-3-Clause",
     "support": {

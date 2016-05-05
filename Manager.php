@@ -145,17 +145,22 @@ class Manager extends Component
             switch (strtolower($config)) {
                 case 'wkhtmltopdf':
                     $config = [
-                        Wkhtmltopdf::className()
+                        'class' => Wkhtmltopdf::className()
                     ];
                     break;
                 case 'mpdf':
                     $config = [
-                        Mpdf::className()
+                        'class' => Mpdf::className()
                     ];
                     break;
                 case 'tcpdf':
                     $config = [
-                        Tcpdf::className()
+                        'class' => Tcpdf::className()
+                    ];
+                    break;
+                case 'dompdf':
+                    $config = [
+                        'class' => Dompdf::className()
                     ];
                     break;
             }
@@ -173,9 +178,9 @@ class Manager extends Component
      * @param string $view the view name or the path alias of the view file.
      * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
      * @param array $options conversion options
-     * @return File converted PDF file representation.
+     * @return TempFile converted PDF file representation.
      */
-    public function render($view, $params, $options = [])
+    public function render($view, $params = [], $options = [])
     {
         $template = new Template([
             'view' => $this->getView(),
@@ -186,17 +191,21 @@ class Manager extends Component
         ]);
         $htmlContent = $template->render($params);
 
-        $fileName = $this->generateTempFileName('html');
-        file_put_contents($fileName, $htmlContent);
+        $htmlFileName = $this->generateTempFileName('html');
+        file_put_contents($htmlFileName, $htmlContent);
 
-        return $this->convert($fileName, $template->pdfOptions);
+        $result = $this->convert($htmlFileName, $template->pdfOptions);
+
+        unlink($htmlFileName);
+
+        return $result;
     }
 
     /**
      * Converts HTML file into PDF file.
      * @param string $fileName source file name.
      * @param array $options conversion options.
-     * @return File converted PDF file representation.
+     * @return TempFile converted PDF file representation.
      * @throws Exception on failure.
      */
     public function convert($fileName, $options = [])
@@ -206,7 +215,7 @@ class Manager extends Component
         if (!file_exists($outputFileName)) {
             throw new Exception('HTML to PDF conversion failed: no output file created.');
         }
-        return new File(['tempName' => $outputFileName]);
+        return new TempFile(['name' => $outputFileName]);
     }
 
     /**
@@ -221,7 +230,7 @@ class Manager extends Component
 
         do {
             $fileName = $tempPath . DIRECTORY_SEPARATOR . uniqid('html2pdf', true) . '.' . $extension;
-        } while (!file_exists($fileName));
+        } while (file_exists($fileName));
 
         return $fileName;
     }
