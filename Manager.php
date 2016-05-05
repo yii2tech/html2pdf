@@ -9,11 +9,14 @@ namespace yii2tech\html2pdf;
 
 use Yii;
 use yii\base\Component;
+use yii\base\Exception;
 use yii\base\InvalidConfigException;
 use yii\base\ViewContextInterface;
 use yii\di\Instance;
 use yii\helpers\FileHelper;
 use yii\web\View;
+use yii2tech\html2pdf\converters\Callback;
+use yii2tech\html2pdf\converters\Wkhtmltopdf;
 
 /**
  * Manager
@@ -29,19 +32,6 @@ use yii\web\View;
 class Manager extends Component implements ViewContextInterface
 {
     /**
-     * @var string path ro the directory containing view files.
-     */
-    private $_viewPath;
-    /**
-     * @var \yii\base\View|array view instance or its array configuration.
-     */
-    private $_view;
-    /**
-     * @var ConverterInterface|array|string converter instance or its configuration.
-     */
-    private $_converter = 'wkhtmltopdf';
-
-    /**
      * @var string|boolean layout view name. This is the layout used to render HTML source.
      * The property can take the following values:
      *
@@ -50,6 +40,19 @@ class Manager extends Component implements ViewContextInterface
      * - a boolean false: the layout is disabled.
      */
     public $layout = 'layouts/main';
+
+    /**
+     * @var string path ro the directory containing view files.
+     */
+    private $_viewPath;
+    /**
+     * @var \yii\base\View|array view instance or its array configuration.
+     */
+    private $_view = [];
+    /**
+     * @var ConverterInterface|array|string converter instance or its configuration.
+     */
+    private $_converter = 'wkhtmltopdf';
 
 
     /**
@@ -140,23 +143,23 @@ class Manager extends Component implements ViewContextInterface
             switch (strtolower($config)) {
                 case 'wkhtmltopdf':
                     $config = [
-                        WkhtmltopdfConverter::className()
+                        Wkhtmltopdf::className()
                     ];
                     break;
                 case 'mpdf':
                     $config = [
-                        MpdfConverter::className()
+                        Mpdf::className()
                     ];
                     break;
                 case 'tcpdf':
                     $config = [
-                        TcpdfConverter::className()
+                        Tcpdf::className()
                     ];
                     break;
             }
         } elseif (is_array($config)) {
             if (!array_key_exists('class', $config)) {
-                $config['class'] = CallbackConverter::className();
+                $config['class'] = Callback::className();
             }
         }
 
@@ -173,7 +176,7 @@ class Manager extends Component implements ViewContextInterface
     public function render($view, $params, $options = [])
     {
         $htmlContent = $this->renderHtml($view, $params);
-        $fileName = $this->generateTempFileName();
+        $fileName = $this->generateTempFileName('html');
         file_put_contents($fileName, $htmlContent);
         return $this->convert($fileName, $options);
     }
@@ -183,11 +186,15 @@ class Manager extends Component implements ViewContextInterface
      * @param string $fileName source file name.
      * @param array $options conversion options.
      * @return File converted PDF file representation.
+     * @throws Exception on failure.
      */
     public function convert($fileName, $options = [])
     {
-        $outputFileName = $this->generateTempFileName();
+        $outputFileName = $this->generateTempFileName('pdf');
         $this->getConverter()->convert($fileName, $outputFileName, $options);
+        if (!file_exists($outputFileName)) {
+            throw new Exception('HTML to PDF conversion failed: no output file created.');
+        }
         return new File(['tempName' => $outputFileName]);
     }
 
@@ -216,9 +223,7 @@ class Manager extends Component implements ViewContextInterface
     protected function generateTempFileName($extension = 'tmp')
     {
         $tempPath = Yii::getAlias('@runtime/html2pdf');
-        if (!file_exists($tempPath)) {
-            FileHelper::createDirectory($tempPath);
-        }
+        FileHelper::createDirectory($tempPath);
 
         do {
             $fileName = $tempPath . DIRECTORY_SEPARATOR . uniqid('html2pdf', true) . '.' . $extension;

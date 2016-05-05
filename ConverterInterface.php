@@ -20,7 +20,6 @@ interface ConverterInterface
      * @param string $sourceFileName source HTML file name.
      * @param string $outputFileName output PDF file name.
      * @param array $options conversion options.
-     * @return boolean success.
      */
-    public function convert($sourceFileName, $outputFileName, $options);
+    public function convert($sourceFileName, $outputFileName, $options = []);
 }
