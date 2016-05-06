@@ -26,7 +26,7 @@ use yii2tech\html2pdf\BaseConverter;
 class Wkhtmltopdf extends BaseConverter
 {
     /**
-     * @var string path to the 'wkhtmltopdf' command, for example: '/usr/bin/wkhtmltopdf'.
+     * @var string path to the 'wkhtmltopdf' command, for example: '/usr/local/bin/wkhtmltopdf'.
      * Default is 'wkhtmltopdf' assuming 'wkhtmltopdf' command is available in OS shell.
      */
     public $binPath = 'wkhtmltopdf';
@@ -73,7 +73,9 @@ class Wkhtmltopdf extends BaseConverter
         $tempPath = Yii::getAlias('@runtime/html2pdf');
         FileHelper::createDirectory($tempPath);
 
-        $sourceFileName = tempnam($tempPath, 'wkhtmltopdf');
+        $tempFileName = tempnam($tempPath, 'wkhtmltopdf');
+        $sourceFileName = $tempFileName . '.html'; // enforce '.html' extension to avoid 'Failed loading page' error
+        rename($tempFileName, $sourceFileName);
         file_put_contents($sourceFileName, $html);
 
         try {

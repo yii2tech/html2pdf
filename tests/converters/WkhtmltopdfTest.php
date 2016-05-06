@@ -27,7 +27,7 @@ class WkhtmltopdfTest extends TestCase
 
     // Tests :
 
-    public function testConvert()
+    public function testConvertFile()
     {
         $converter = new Wkhtmltopdf();
 
@@ -35,6 +35,18 @@ class WkhtmltopdfTest extends TestCase
         $outputFileName = $this->ensureTestFilePath() . '/output.pdf';
 
         $converter->convertFile($sourceFileName, $outputFileName);
+
+        $this->assertTrue(file_exists($outputFileName));
+    }
+
+    public function testConvert()
+    {
+        $converter = new Wkhtmltopdf();
+
+        $sourceFileName = dirname(__DIR__) . '/data/html/simple.html';
+        $outputFileName = $this->ensureTestFilePath() . '/output.pdf';
+
+        $converter->convert(file_get_contents($sourceFileName), $outputFileName);
 
         $this->assertTrue(file_exists($outputFileName));
     }
