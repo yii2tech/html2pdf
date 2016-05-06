@@ -21,7 +21,23 @@ use yii2tech\html2pdf\converters\Tcpdf;
 use yii2tech\html2pdf\converters\Wkhtmltopdf;
 
 /**
- * Manager
+ * Manager is an application component, which provides ability for PDF composition from PHP view files
+ * as well as direct HTML to PDF conversion.
+ *
+ * Application configuration example:
+ *
+ * ```php
+ * return [
+ *     'components' => [
+ *         'html2pdf' => [
+ *             'class' => 'yii2tech\html2pdf\Manager',
+ *             'viewPath' => '@app/pdf',
+ *             'converter' => 'wkhtmltopdf',
+ *         ],
+ *     ],
+ *     // ...
+ * ];
+ * ```
  *
  * @see ConverterInterface
  * @see Template

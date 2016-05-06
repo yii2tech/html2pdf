@@ -61,6 +61,20 @@ class TempFile extends Object
     }
 
     /**
+     * Saves this file.
+     * @param string $file destination file name (may content path alias).
+     * @param boolean $deleteTempFile whether to delete associated temp file or not.
+     * @return boolean whether operation was successful.
+     */
+    public function saveAs($file, $deleteTempFile = true)
+    {
+        if ($deleteTempFile) {
+            return $this->move($file);
+        }
+        return $this->copy($file);
+    }
+
+    /**
      * Prepares raw destination file name for the file copy/move operation:
      * resolves path alias and creates missing directories.
      * @param string $destinationFileName destination file name
