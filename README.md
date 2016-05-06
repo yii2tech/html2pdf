@@ -152,7 +152,7 @@ $context = $this->context;
 
 $context->layout = 'layouts/payment'; // use specific layout for this template
 
-// specify particular PDf conversion for this template:
+// specify particular PDF conversion for this template:
 $context->pdfOptions = [
     'pageSize' => 'A4',
     // ...
