@@ -33,7 +33,7 @@ class Dompdf extends BaseConverter
     protected function convertInternal($sourceFileName, $outputFileName, $options)
     {
         $pageSize = ArrayHelper::remove($options, 'pageSize', 'A4');
-        $orientation = ArrayHelper::remove($options, 'orientation', 'landscape');
+        $orientation = ArrayHelper::remove($options, 'orientation', 'portrait');
 
         if (empty($options)) {
             $dompdfOptions = null;

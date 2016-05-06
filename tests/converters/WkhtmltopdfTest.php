@@ -9,6 +9,7 @@ class WkhtmltopdfTest extends TestCase
 {
     protected function setUp()
     {
+        parent::setUp();
         if (!$this->isConverterAvailable()) {
             $this->markTestSkipped('Shell command "wkhtmltopdf" is unavailable');
         }

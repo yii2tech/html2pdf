@@ -2,16 +2,16 @@
 
 namespace yii2tech\tests\unit\html2pdf\converters;
 
-use yii2tech\html2pdf\converters\Dompdf;
+use yii2tech\html2pdf\converters\Tcpdf;
 use yii2tech\tests\unit\html2pdf\TestCase;
 
-class DompdfTest extends TestCase
+class TcpdfTest extends TestCase
 {
     protected function setUp()
     {
         parent::setUp();
         if (!$this->isConverterAvailable()) {
-            $this->markTestSkipped('"Dompdf" library required');
+            $this->markTestSkipped('"TCPDF" library required');
         }
     }
 
@@ -20,14 +20,14 @@ class DompdfTest extends TestCase
      */
     protected function isConverterAvailable()
     {
-        return class_exists('Dompdf\Dompdf', true);
+        return class_exists('TCPDF', true);
     }
 
     // Tests :
 
     public function testConvert()
     {
-        $converter = new Dompdf();
+        $converter = new Tcpdf();
 
         $sourceFileName = dirname(__DIR__) . '/data/html/simple.html';
         $outputFileName = $this->ensureTestFilePath() . '/output.pdf';

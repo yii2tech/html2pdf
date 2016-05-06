@@ -9,6 +9,7 @@ class MpdfTest extends TestCase
 {
     protected function setUp()
     {
+        parent::setUp();
         if (!$this->isConverterAvailable()) {
             $this->markTestSkipped('"Mpdf" library required');
         }
