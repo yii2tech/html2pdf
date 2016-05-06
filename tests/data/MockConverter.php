@@ -15,9 +15,9 @@ class MockConverter extends BaseConverter
     /**
      * @inheritdoc
      */
-    protected function convertInternal($sourceFileName, $outputFileName, $options)
+    protected function convertInternal($html, $outputFileName, $options)
     {
         $this->lastUsedOptions = $options;
-        copy($sourceFileName, $outputFileName);
+        file_put_contents($outputFileName, $html);
     }
 }

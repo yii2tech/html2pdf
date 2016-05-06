@@ -30,7 +30,7 @@ class Dompdf extends BaseConverter
     /**
      * @inheritdoc
      */
-    protected function convertInternal($sourceFileName, $outputFileName, $options)
+    protected function convertInternal($html, $outputFileName, $options)
     {
         $pageSize = ArrayHelper::remove($options, 'pageSize', 'A4');
         $orientation = ArrayHelper::remove($options, 'orientation', 'portrait');
@@ -47,7 +47,7 @@ class Dompdf extends BaseConverter
         $dompdf = new \Dompdf\Dompdf($dompdfOptions);
         $dompdf->setPaper($pageSize, $orientation);
 
-        $dompdf->loadHtmlFile($sourceFileName);
+        $dompdf->loadHtml($html);
         $dompdf->render();
 
         file_put_contents($outputFileName, $dompdf->output());

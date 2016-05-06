@@ -7,7 +7,9 @@
 
 namespace yii2tech\html2pdf\converters;
 
+use Yii;
 use yii\base\Exception;
+use yii\helpers\FileHelper;
 use yii\helpers\Inflector;
 use yii2tech\html2pdf\BaseConverter;
 
@@ -33,7 +35,20 @@ class Wkhtmltopdf extends BaseConverter
     /**
      * @inheritdoc
      */
-    protected function convertInternal($sourceFileName, $outputFileName, $options)
+    public function convertFile($sourceFileName, $outputFileName, $options = [])
+    {
+        $options = array_merge($this->defaultOptions, $options);
+        $this->convertFileInternal($sourceFileName, $outputFileName, $options);
+    }
+
+    /**
+     * Converts given HTML file into PDF file.
+     * @param string $sourceFileName source HTML file.
+     * @param string $outputFileName output PDF file name.
+     * @param array $options conversion options.
+     * @throws Exception on failure.
+     */
+    protected function convertFileInternal($sourceFileName, $outputFileName, $options)
     {
         $command = $this->binPath;
         foreach ($this->normalizeOptions($options) as $name => $value) {
@@ -48,6 +63,27 @@ class Wkhtmltopdf extends BaseConverter
         if ($exitCode !== 0) {
             throw new Exception("Unable to convert file '{$sourceFileName}': " . implode("\n", $outputLines));
         }
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function convertInternal($html, $outputFileName, $options)
+    {
+        $tempPath = Yii::getAlias('@runtime/html2pdf');
+        FileHelper::createDirectory($tempPath);
+
+        $sourceFileName = tempnam($tempPath, 'wkhtmltopdf');
+        file_put_contents($sourceFileName, $html);
+
+        try {
+            $this->convertFileInternal($sourceFileName, $outputFileName, $options);
+        } catch (\Exception $e) {
+            unlink($sourceFileName);
+            throw $e;
+        }
+
+        unlink($sourceFileName);
     }
 
     /**

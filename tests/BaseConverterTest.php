@@ -20,7 +20,7 @@ class BaseConverterTest extends TestCase
             'option2' => 'override',
             'option3' => 'foo',
         ];
-        $converter->convert(__FILE__, $filePath . '/test.pdf', $options);
+        $converter->convertFile(__FILE__, $filePath . '/test.pdf', $options);
 
         $this->assertEquals('default', $converter->lastUsedOptions['option1']);
         $this->assertEquals('override', $converter->lastUsedOptions['option2']);

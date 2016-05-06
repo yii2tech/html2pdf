@@ -28,7 +28,7 @@ class Tcpdf extends BaseConverter
     /**
      * @inheritdoc
      */
-    protected function convertInternal($sourceFileName, $outputFileName, $options)
+    protected function convertInternal($html, $outputFileName, $options)
     {
         $charset = ArrayHelper::remove($options, 'charset', Yii::$app->charset);
         $pageSize = ArrayHelper::remove($options, 'pageSize', 'A4');
@@ -52,7 +52,7 @@ class Tcpdf extends BaseConverter
         // add a page
         $pdf->AddPage();
 
-        $pdf->WriteHTML(file_get_contents($sourceFileName));
+        $pdf->WriteHTML($html);
         $pdf->Output($outputFileName, 'F');
     }
 }

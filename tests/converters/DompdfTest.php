@@ -32,7 +32,7 @@ class DompdfTest extends TestCase
         $sourceFileName = dirname(__DIR__) . '/data/html/simple.html';
         $outputFileName = $this->ensureTestFilePath() . '/output.pdf';
 
-        $converter->convert($sourceFileName, $outputFileName);
+        $converter->convertFile($sourceFileName, $outputFileName);
 
         $this->assertTrue(file_exists($outputFileName));
     }

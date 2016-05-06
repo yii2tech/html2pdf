@@ -17,6 +17,7 @@ use yii\web\View;
 use yii2tech\html2pdf\converters\Callback;
 use yii2tech\html2pdf\converters\Dompdf;
 use yii2tech\html2pdf\converters\Mpdf;
+use yii2tech\html2pdf\converters\Tcpdf;
 use yii2tech\html2pdf\converters\Wkhtmltopdf;
 
 /**
@@ -179,28 +180,36 @@ class Manager extends Component
      * Renders the specified view with optional parameters and layout and converts rendering result into the PDF file.
      * @param string $view the view name or the path alias of the view file.
      * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
-     * @param array $options conversion options
      * @return TempFile converted PDF file representation.
      */
-    public function render($view, $params = [], $options = [])
+    public function render($view, $params = [])
     {
         $template = new Template([
             'view' => $this->getView(),
             'viewPath' => $this->getViewPath(),
             'viewName' => $view,
             'layout' => $this->layout,
-            'pdfOptions' => $options,
         ]);
         $htmlContent = $template->render($params);
 
-        $htmlFileName = $this->generateTempFileName('html');
-        file_put_contents($htmlFileName, $htmlContent);
+        return $this->convert($htmlContent, $template->pdfOptions);
+    }
 
-        $result = $this->convert($htmlFileName, $template->pdfOptions);
-
-        unlink($htmlFileName);
-
-        return $result;
+    /**
+     * Converts HTML content into PDF file.
+     * @param string $html source HTML content.
+     * @param array $options conversion options.
+     * @return TempFile converted PDF file representation.
+     * @throws Exception on failure.
+     */
+    public function convert($html, $options = [])
+    {
+        $outputFileName = $this->generateTempFileName('pdf');
+        $this->getConverter()->convert($html, $outputFileName, $options);
+        if (!file_exists($outputFileName)) {
+            throw new Exception('HTML to PDF conversion failed: no output file created.');
+        }
+        return new TempFile(['name' => $outputFileName]);
     }
 
     /**
@@ -210,10 +219,10 @@ class Manager extends Component
      * @return TempFile converted PDF file representation.
      * @throws Exception on failure.
      */
-    public function convert($fileName, $options = [])
+    public function convertFile($fileName, $options = [])
     {
         $outputFileName = $this->generateTempFileName('pdf');
-        $this->getConverter()->convert($fileName, $outputFileName, $options);
+        $this->getConverter()->convertFile($fileName, $outputFileName, $options);
         if (!file_exists($outputFileName)) {
             throw new Exception('HTML to PDF conversion failed: no output file created.');
         }

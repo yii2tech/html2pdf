@@ -27,17 +27,25 @@ abstract class BaseConverter extends Component implements ConverterInterface
     /**
      * @inheritdoc
      */
-    public function convert($sourceFileName, $outputFileName, $options = [])
+    public function convert($html, $outputFileName, $options = [])
     {
         $options = array_merge($this->defaultOptions, $options);
-        $this->convertInternal($sourceFileName, $outputFileName, $options);
+        $this->convertInternal($html, $outputFileName, $options);
     }
 
     /**
-     * Converts given HTML file into PDF file.
-     * @param string $sourceFileName source HTML file name.
+     * @inheritdoc
+     */
+    public function convertFile($sourceFileName, $outputFileName, $options = [])
+    {
+        $this->convert(file_get_contents($sourceFileName), $outputFileName, $options);
+    }
+
+    /**
+     * Converts given HTML content into PDF file.
+     * @param string $html source HTML content.
      * @param string $outputFileName output PDF file name.
      * @param array $options conversion options.
      */
-    abstract protected function convertInternal($sourceFileName, $outputFileName, $options);
+    abstract protected function convertInternal($html, $outputFileName, $options);
 }

@@ -77,7 +77,7 @@ class ManagerTest extends TestCase
     {
         $manager = $this->createManager();
 
-        $file = $manager->convert(__FILE__);
+        $file = $manager->convertFile(__FILE__);
         $this->assertTrue($file instanceof TempFile);
         $this->assertTrue(file_exists($file->name));
     }

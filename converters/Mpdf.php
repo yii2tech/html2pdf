@@ -31,23 +31,23 @@ class Mpdf extends BaseConverter
     /**
      * @inheritdoc
      */
-    protected function convertInternal($sourceFileName, $outputFileName, $options)
+    protected function convertInternal($html, $outputFileName, $options)
     {
         $charset = ArrayHelper::remove($options, 'charset', Yii::$app->charset);
         $pageSize = ArrayHelper::remove($options, 'pageSize', 'A4');
 
-        $mpdf = new \mPDF($charset, $pageSize);
+        $pdf = new \mPDF($charset, $pageSize);
 
         foreach ($options as $name => $value) {
             $setter = 'Set' . $name;
-            if (method_exists($mpdf, $setter)) {
-                $mpdf->$setter($value);
+            if (method_exists($pdf, $setter)) {
+                $pdf->$setter($value);
             } else {
-                $mpdf->$name = $value;
+                $pdf->$name = $value;
             }
         }
 
-        $mpdf->WriteHTML(file_get_contents($sourceFileName));
-        $mpdf->Output($outputFileName, 'F');
+        $pdf->WriteHTML($html);
+        $pdf->Output($outputFileName, 'F');
     }
 }
