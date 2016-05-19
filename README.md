@@ -45,7 +45,7 @@ Application configuration example:
 ```php
 return [
     'components' => [
-        'balanceManager' => [
+        'pdfManager' => [
             'class' => 'yii2tech\html2pdf\Manager',
             'viewPath' => '@app/pdf',
             'converter' => 'wkhtmltopdf',
@@ -92,7 +92,7 @@ Several built-in converters are provided:
  - [[yii2tech\html2pdf\converters\Callback]] - uses a custom PHP callback for the conversion.
 
 **Heads up!** Most of the provided converters require additional software been installed, which is not provided by
-his extension by default. You'll have to install it manually once you decide, which converter you will use.
+his extension by default. You'll have to install it manually, once you decide, which converter you will use.
 Please refer to the particular converter class for more details.
 
 You may specify conversion options via second argument of the `convert()` or `convertFile()` method:
@@ -108,7 +108,7 @@ You may setup default conversion options at the [[\yii2tech\html2pdf\Manager]] l
 ```php
 return [
     'components' => [
-        'balanceManager' => [
+        'pdfManager' => [
             'class' => 'yii2tech\html2pdf\Manager',
             'viewPath' => '@app/pdf',
             'converter' => [
