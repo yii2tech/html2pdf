@@ -16,7 +16,7 @@ class TcpdfTest extends TestCase
     }
 
     /**
-     * @return boolean whether converter to be tested is available.
+     * @return bool whether converter to be tested is available.
      */
     protected function isConverterAvailable()
     {

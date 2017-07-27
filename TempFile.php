@@ -39,7 +39,7 @@ class TempFile extends Object
     /**
      * Copies this file into another location.
      * @param string $destinationFileName destination file name (may content path alias).
-     * @return boolean whether operation was successful.
+     * @return bool whether operation was successful.
      */
     public function copy($destinationFileName)
     {
@@ -50,7 +50,7 @@ class TempFile extends Object
     /**
      * Moves this file into another location.
      * @param string $destinationFileName destination file name (may content path alias).
-     * @return boolean whether operation was successful.
+     * @return bool whether operation was successful.
      */
     public function move($destinationFileName)
     {
@@ -63,8 +63,8 @@ class TempFile extends Object
     /**
      * Saves this file.
      * @param string $file destination file name (may content path alias).
-     * @param boolean $deleteTempFile whether to delete associated temp file or not.
-     * @return boolean whether operation was successful.
+     * @param bool $deleteTempFile whether to delete associated temp file or not.
+     * @return bool whether operation was successful.
      */
     public function saveAs($file, $deleteTempFile = true)
     {
@@ -90,7 +90,7 @@ class TempFile extends Object
 
     /**
      * Deletes associated temporary file.
-     * @return boolean whether file has been deleted.
+     * @return bool whether file has been deleted.
      */
     public function delete()
     {

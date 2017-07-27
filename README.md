@@ -1,5 +1,10 @@
-HTML to PDF conversion extension for Yii2
-=========================================
+<p align="center">
+    <a href="https://github.com/yii2tech" target="_blank">
+        <img src="https://avatars2.githubusercontent.com/u/12951949" height="100px">
+    </a>
+    <h1 align="center">HTML to PDF conversion extension for Yii2</h1>
+    <br>
+</p>
 
 This extension provides basic support for HTML to PDF and PHP to PDF conversion.
 
@@ -81,7 +86,7 @@ Yii::$app->html2pdf
 ```
 
 The actual conversion result determined by particular converter used.
-You may use [[\yii2tech\html2pdf\Manager::converter]] property for the converter setup.
+You may use [[\yii2tech\html2pdf\Manager::$converter]] property for the converter setup.
 
 Several built-in converters are provided:
 
@@ -138,7 +143,7 @@ Yii::$app->html2pdf
     ->saveAs('/path/to/output.pdf');
 ```
 
-You may use a shared layout for the templates, which can be setup via [[\yii2tech\html2pdf\Manager::layout]].
+You may use a shared layout for the templates, which can be setup via [[\yii2tech\html2pdf\Manager::$layout]].
 
 During each rendering view is working in context of [[\yii2tech\html2pdf\Template]] object, which can be used to adjust
 layout or PDF conversion options inside view file:

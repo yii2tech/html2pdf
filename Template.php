@@ -30,12 +30,12 @@ class Template extends Object implements ViewContextInterface
      */
     public $viewName;
     /**
-     * @var string|boolean layout view name. This is the layout used to render HTML source.
+     * @var string|bool layout view name. This is the layout used to render HTML source.
      * The property can take the following values:
      *
      * - a relative view name: a view file relative to [[viewPath]], e.g., 'layouts/main'.
      * - a path alias: an absolute view file path specified as a path alias, e.g., '@app/pdf/layout'.
-     * - a boolean false: the layout is disabled.
+     * - a bool false: the layout is disabled.
      */
     public $layout;
     /**
