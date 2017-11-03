@@ -8,7 +8,7 @@
 namespace yii2tech\html2pdf;
 
 use Yii;
-use yii\base\Object;
+use yii\base\BaseObject;
 use yii\helpers\FileHelper;
 
 /**
@@ -18,7 +18,7 @@ use yii\helpers\FileHelper;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 1.0
  */
-class TempFile extends Object
+class TempFile extends BaseObject
 {
     /**
      * @var string the path of the file.

@@ -7,7 +7,7 @@
 
 namespace yii2tech\html2pdf;
 
-use yii\base\Object;
+use yii\base\BaseObject;
 use yii\base\ViewContextInterface;
 
 /**
@@ -19,7 +19,7 @@ use yii\base\ViewContextInterface;
  * @author Paul Klimov <klimov.paul@gmail.com>
  * @since 1.0
  */
-class Template extends Object implements ViewContextInterface
+class Template extends BaseObject implements ViewContextInterface
 {
     /**
      * @var string path ro the directory containing view files.
