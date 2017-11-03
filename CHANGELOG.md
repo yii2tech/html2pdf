@@ -1,7 +1,7 @@
 Yii 2 HTML to PDF conversion extension Change Log
 =================================================
 
-1.0.1 under development
+1.0.1, November 3, 2017
 -----------------------
 
 - Bug: Usage of deprecated `yii\base\Object` changed to `yii\base\BaseObject` allowing compatibility with PHP 7.2 (klimov-paul)
