@@ -17,26 +17,33 @@ use yii2tech\html2pdf\BaseConverter;
  * This converter requires `mpdf` library to be installed. This can be done via composer:
  *
  * ```
- * composer require --prefer-dist mpdf/mpdf
+ * composer require --prefer-dist "mpdf/mpdf:^6.0.0|^7.0.0"
  * ```
  *
  * @see http://mpdf.github.io
  * @see https://github.com/mpdf/mpdf
  *
- * @author Paul Klimov <pklimov@quartsoft.com>
- * @package yii2tech\html2pdf\converters
+ * @author Paul Klimov <klimov.paul@gmail.com>
+ * @since 1.0
  */
 class Mpdf extends BaseConverter
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function convertInternal($html, $outputFileName, $options)
     {
         $charset = ArrayHelper::remove($options, 'charset', Yii::$app->charset);
         $pageSize = ArrayHelper::remove($options, 'pageSize', 'A4');
 
-        $pdf = new \mPDF($charset, $pageSize);
+        if (class_exists('Mpdf\Mpdf')) {
+            $pdf = new \Mpdf\Mpdf([
+                'mode' => $charset,
+                'format' => $pageSize,
+            ]);
+        } else {
+            $pdf = new \mPDF($charset, $pageSize);
+        }
 
         foreach ($options as $name => $value) {
             $setter = 'Set' . $name;

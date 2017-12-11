@@ -105,7 +105,7 @@ class Manager extends Component
     public function setView($view)
     {
         if (!is_array($view) && !is_object($view)) {
-            throw new InvalidConfigException('"' . get_class($this) . '::view" should be either object or configuration array, "' . gettype($view) . '" given.');
+            throw new InvalidConfigException('"' . get_class($this) . '::$view" should be either object or configuration array, "' . gettype($view) . '" given.');
         }
         $this->_view = $view;
     }

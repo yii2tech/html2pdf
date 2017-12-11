@@ -12,7 +12,7 @@ use yii\base\ViewContextInterface;
 
 /**
  * Template represents particular PDF file view template.
- * Its instance will be available inside view file via [[\yii\base\View::context]].
+ * Its instance will be available inside view file via [[\yii\base\View::$context]].
  *
  * @see Manager
  *
@@ -50,7 +50,7 @@ class Template extends BaseObject implements ViewContextInterface
 
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function getViewPath()
     {

@@ -20,13 +20,13 @@ use yii2tech\html2pdf\BaseConverter;
  * composer require --prefer-dist tecnickcom/tcpdf
  * ```
  *
- * @author Paul Klimov <pklimov@quartsoft.com>
- * @package yii2tech\html2pdf\converters
+ * @author Paul Klimov <klimov.paul@gmail.com>
+ * @since 1.0
  */
 class Tcpdf extends BaseConverter
 {
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function convertInternal($html, $outputFileName, $options)
     {

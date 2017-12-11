@@ -20,7 +20,7 @@ class MpdfTest extends TestCase
      */
     protected function isConverterAvailable()
     {
-        return class_exists('mPDF', true);
+        return class_exists('mPDF', true) || class_exists('Mpdf\Mpdf', true);
     }
 
     // Tests :

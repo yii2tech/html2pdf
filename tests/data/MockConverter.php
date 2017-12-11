@@ -13,7 +13,7 @@ class MockConverter extends BaseConverter
 
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function convertInternal($html, $outputFileName, $options)
     {

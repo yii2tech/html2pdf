@@ -25,7 +25,7 @@ abstract class BaseConverter extends Component implements ConverterInterface
 
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function convert($html, $outputFileName, $options = [])
     {
@@ -34,7 +34,7 @@ abstract class BaseConverter extends Component implements ConverterInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function convertFile($sourceFileName, $outputFileName, $options = [])
     {

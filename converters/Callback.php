@@ -15,8 +15,8 @@ use yii2tech\html2pdf\BaseConverter;
 /**
  * Callback converter uses a custom PHP callback for the file conversion.
  *
- * @author Paul Klimov <pklimov@quartsoft.com>
- * @package yii2tech\html2pdf\converters
+ * @author Paul Klimov <klimov.paul@gmail.com>
+ * @since 1.0
  */
 class Callback extends BaseConverter
 {
@@ -45,7 +45,7 @@ class Callback extends BaseConverter
 
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function convertFile($sourceFileName, $outputFileName, $options = [])
     {
@@ -58,7 +58,7 @@ class Callback extends BaseConverter
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     protected function convertInternal($html, $outputFileName, $options)
     {

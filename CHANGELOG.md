@@ -1,6 +1,12 @@
 Yii 2 HTML to PDF conversion extension Change Log
 =================================================
 
+1.0.2 under development
+-----------------------
+
+- Enh #3: Added support for mPDF version >= 7.0 (klimov-paul)
+
+
 1.0.1, November 3, 2017
 -----------------------
 
