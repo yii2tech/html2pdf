@@ -52,7 +52,7 @@ class Wkhtmltopdf extends BaseConverter
     {
         $command = $this->binPath;
         foreach ($this->normalizeOptions($options) as $name => $value) {
-            $command .= " --{$name} {$value}";
+            $command .= $this->buildCommandOption($name, $value);
         }
         $command .= ' ' . escapeshellarg($sourceFileName) . ' ' . escapeshellarg($outputFileName);
         $command .= ' 2>&1';
@@ -97,9 +97,27 @@ class Wkhtmltopdf extends BaseConverter
     {
         $result = [];
         foreach ($options as $name => $value) {
+            if (is_null($value) || $value === false) {
+                continue;
+            }
             $normalizedName = Inflector::camel2id($name);
             $result[$normalizedName] = $value;
         }
         return $result;
+    }
+
+    /**
+     * Build option for the shell command composition
+     * @param string $name option name
+     * @param mixed $value option value
+     * @return string option name-value pair
+     */
+    protected function buildCommandOption($name, $value)
+    {
+        $option = " --{$name}";
+        if ($value !== true) {
+            $option .= ' ' . escapeshellarg($value);
+        }
+        return $option;
     }
 }
