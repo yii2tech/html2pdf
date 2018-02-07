@@ -31,6 +31,26 @@ class Wkhtmltopdf extends BaseConverter
      */
     public $binPath = 'wkhtmltopdf';
 
+    /**
+     * @var array list of command options aliases.
+     */
+    protected $optionAlias = [
+        'd' => 'dpi',
+        'H' => 'extended-help',
+        'g' => 'grayscale',
+        'h' => 'help',
+        'l' => 'lowquality',
+        'B' => 'margin-bottom',
+        'L' => 'margin-left',
+        'R' => 'margin-right',
+        'T' => 'margin-top',
+        'O' => 'orientation',
+        's' => 'page-size',
+        'q' => 'quiet',
+        'V' => 'version',
+        'n' => 'disable-javascript',
+        'p' => 'proxy',
+    ];
 
     /**
      * {@inheritdoc}
@@ -52,7 +72,7 @@ class Wkhtmltopdf extends BaseConverter
     {
         $command = $this->binPath;
         foreach ($this->normalizeOptions($options) as $name => $value) {
-            $command .= " --{$name} {$value}";
+            $command .= $this->buildCommandOption($name, $value);
         }
         $command .= ' ' . escapeshellarg($sourceFileName) . ' ' . escapeshellarg($outputFileName);
         $command .= ' 2>&1';
@@ -97,9 +117,46 @@ class Wkhtmltopdf extends BaseConverter
     {
         $result = [];
         foreach ($options as $name => $value) {
+            if (is_null($value) || $value === false) {
+                continue;
+            }
+            if (isset($this->optionAlias[$name])) {
+                $name = $this->optionAlias[$name];
+            }
             $normalizedName = Inflector::camel2id($name);
             $result[$normalizedName] = $value;
         }
         return $result;
+    }
+
+    /**
+     * Build option for the shell command composition
+     * @param string $name option name
+     * @param mixed $value option value
+     * @return string option name-value pair
+     */
+    protected function buildCommandOption($name, $value)
+    {
+        $prefix = '--';
+        if (in_array($name, ['toc', 'cover'])) { // Don't add '--' in these options
+            $prefix = '';
+        }
+
+        $option = " {$prefix}{$name}";
+
+        if ($value !== true) {
+            if (is_array($value)) { // Support repeatable options
+                $repeatableOptions = [];
+                foreach ($value as $k => $v) {
+                    $repeatableOptions[] = $option
+                        . (is_string($k) ? ' ' . escapeshellarg($k) : '')
+                        . ' ' .escapeshellarg($v);
+                }
+                $option = implode(' ', $repeatableOptions);
+            } else {
+                $option .= ' ' . escapeshellarg($value);
+            }
+        }
+        return $option;
     }
 }
