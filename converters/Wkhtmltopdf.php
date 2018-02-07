@@ -145,7 +145,17 @@ class Wkhtmltopdf extends BaseConverter
         $option = " {$prefix}{$name}";
 
         if ($value !== true) {
-            $option .= ' ' . escapeshellarg($value);
+            if (is_array($value)) { // Support repeatable options
+                $repeatableOptions = [];
+                foreach ($value as $k => $v) {
+                    $repeatableOptions[] = $option
+                        . (is_string($k) ? ' ' . escapeshellarg($k) : '')
+                        . ' ' .escapeshellarg($v);
+                }
+                $option = implode(' ', $repeatableOptions);
+            } else {
+                $option .= ' ' . escapeshellarg($value);
+            }
         }
         return $option;
     }
