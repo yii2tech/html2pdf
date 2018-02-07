@@ -31,6 +31,26 @@ class Wkhtmltopdf extends BaseConverter
      */
     public $binPath = 'wkhtmltopdf';
 
+    /**
+     * @var array list of command options aliases.
+     */
+    protected $optionAlias = [
+        'd' => 'dpi',
+        'H' => 'extended-help',
+        'g' => 'grayscale',
+        'h' => 'help',
+        'l' => 'lowquality',
+        'B' => 'margin-bottom',
+        'L' => 'margin-left',
+        'R' => 'margin-right',
+        'T' => 'margin-top',
+        'O' => 'orientation',
+        's' => 'page-size',
+        'q' => 'quiet',
+        'V' => 'version',
+        'n' => 'disable-javascript',
+        'p' => 'proxy',
+    ];
 
     /**
      * {@inheritdoc}
@@ -100,6 +120,9 @@ class Wkhtmltopdf extends BaseConverter
             if (is_null($value) || $value === false) {
                 continue;
             }
+            if (isset($this->optionAlias[$name])) {
+                $name = $this->optionAlias[$name];
+            }
             $normalizedName = Inflector::camel2id($name);
             $result[$normalizedName] = $value;
         }
@@ -114,7 +137,13 @@ class Wkhtmltopdf extends BaseConverter
      */
     protected function buildCommandOption($name, $value)
     {
-        $option = " --{$name}";
+        $prefix = '--';
+        if (in_array($name, ['toc', 'cover'])) { // Don't add '--' in these options
+            $prefix = '';
+        }
+
+        $option = " {$prefix}{$name}";
+
         if ($value !== true) {
             $option .= ' ' . escapeshellarg($value);
         }
