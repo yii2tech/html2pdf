@@ -52,7 +52,7 @@ class Wkhtmltopdf extends BaseConverter
     {
         $command = $this->binPath;
         foreach ($this->normalizeOptions($options) as $name => $value) {
-            $command .= " --{$name} {$value}";
+            $command .= $this->buildCommandOption($name, $value);
         }
         $command .= ' ' . escapeshellarg($sourceFileName) . ' ' . escapeshellarg($outputFileName);
         $command .= ' 2>&1';
@@ -97,9 +97,43 @@ class Wkhtmltopdf extends BaseConverter
     {
         $result = [];
         foreach ($options as $name => $value) {
+            if (is_null($value) || $value === false) {
+                continue;
+            }
             $normalizedName = Inflector::camel2id($name);
             $result[$normalizedName] = $value;
         }
         return $result;
+    }
+
+    /**
+     * Builds option for the shell command composition.
+     * @param string $name option name.
+     * @param mixed $value option value.
+     * @return string option shell representation.
+     * @since 1.0.2
+     */
+    protected function buildCommandOption($name, $value)
+    {
+        $prefix = '--';
+        if (in_array($name, ['toc', 'cover'])) { // Don't add '--' in these options
+            $prefix = '';
+        }
+
+        $option = ' ' . $prefix . $name;
+
+        if ($value === true) {
+            return $option;
+        }
+
+        if (is_array($value)) { // Support repeatable options
+            $repeatableOptions = [];
+            foreach ($value as $k => $v) {
+                $repeatableOptions[] = $option . (is_string($k) ? ' ' . escapeshellarg($k) : '') . ' ' .escapeshellarg($v);
+            }
+            return implode(' ', $repeatableOptions);
+        }
+
+        return $option . ' ' . escapeshellarg($value);
     }
 }

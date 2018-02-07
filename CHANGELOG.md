@@ -5,6 +5,7 @@ Yii 2 HTML to PDF conversion extension Change Log
 -----------------------
 
 - Enh #3: Added support for mPDF version >= 7.0 (klimov-paul)
+- Enh #5: 'wkhtmltopdf' command composition improved adding support for boolean and array options (berosoboy)
 
 
 1.0.1, November 3, 2017
