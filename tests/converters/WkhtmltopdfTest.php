@@ -5,6 +5,9 @@ namespace yii2tech\tests\unit\html2pdf\converters;
 use yii2tech\html2pdf\converters\Wkhtmltopdf;
 use yii2tech\tests\unit\html2pdf\TestCase;
 
+/**
+ * @group wkhtmltopdf
+ */
 class WkhtmltopdfTest extends TestCase
 {
     protected function setUp()
@@ -26,6 +29,49 @@ class WkhtmltopdfTest extends TestCase
     }
 
     // Tests :
+
+    /**
+     * Data provider for [[testNormalizeOptions()]].
+     * @return array test data
+     */
+    public function dataProviderNormalizeOptions()
+    {
+        return [
+            [
+                [
+                    'pageSize' => 'A4'
+                ],
+                [
+                    'page-size' => 'A4'
+                ],
+            ],
+            [
+                [
+                    'toc' => '/path/to/table-of-content',
+                    'cover' => '/path/to/cover',
+                    'pageSize' => 'A4',
+                ],
+                [
+                    'page-size' => 'A4',
+                    'cover' => '/path/to/cover',
+                    'toc' => '/path/to/table-of-content',
+                ],
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider dataProviderNormalizeOptions
+     *
+     * @param array $rawOptions
+     * @param array $expectedNormalizedOptions
+     */
+    public function testNormalizeOptions(array $rawOptions, array $expectedNormalizedOptions)
+    {
+        $converter = new Wkhtmltopdf();
+        $normalizedOptions = $this->invoke($converter, 'normalizeOptions', [$rawOptions]);
+        $this->assertSame($expectedNormalizedOptions, $normalizedOptions);
+    }
 
     public function testConvertFile()
     {

@@ -96,6 +96,7 @@ class Wkhtmltopdf extends BaseConverter
     protected function normalizeOptions($options)
     {
         $result = [];
+
         foreach ($options as $name => $value) {
             if (is_null($value) || $value === false) {
                 continue;
@@ -103,6 +104,25 @@ class Wkhtmltopdf extends BaseConverter
             $normalizedName = Inflector::camel2id($name);
             $result[$normalizedName] = $value;
         }
+
+        // make sure 'toc' and 'cover' options to be last, so global options will not mix with them
+        uksort($result, function ($a, $b) {
+            if ($a === 'toc') {
+                return 1;
+            }
+            if ($b === 'toc') {
+                return -1;
+            }
+            if ($a === 'cover') {
+                return 1;
+            }
+            if ($b === 'cover') {
+                return -1;
+            }
+
+            return 0;
+        });
+
         return $result;
     }
 

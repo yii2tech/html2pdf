@@ -5,6 +5,9 @@ namespace yii2tech\tests\unit\html2pdf\converters;
 use yii2tech\html2pdf\converters\Tcpdf;
 use yii2tech\tests\unit\html2pdf\TestCase;
 
+/**
+ * @group tcpdf
+ */
 class TcpdfTest extends TestCase
 {
     protected function setUp()

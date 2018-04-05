@@ -1,6 +1,12 @@
 Yii 2 HTML to PDF conversion extension Change Log
 =================================================
 
+1.0.3 under development
+-----------------------
+
+- Enh #8: 'wkhtmltopdf' command composition improved ensuring options 'cover' and 'toc' do not utilize global ones (klimov-paul)
+
+
 1.0.2, February 13, 2018
 ------------------------
 

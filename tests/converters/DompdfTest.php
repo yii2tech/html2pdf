@@ -5,6 +5,9 @@ namespace yii2tech\tests\unit\html2pdf\converters;
 use yii2tech\html2pdf\converters\Dompdf;
 use yii2tech\tests\unit\html2pdf\TestCase;
 
+/**
+ * @group dompdf
+ */
 class DompdfTest extends TestCase
 {
     protected function setUp()
