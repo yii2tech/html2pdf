@@ -18,6 +18,21 @@ use yii2tech\html2pdf\BaseConverter;
  *
  * This converter requires `wkhtmltopdf` utility installed and being available via OS shell.
  *
+ * Conversion options are converted into command line options, using [[Inflector::camel2id()]].
+ * Available conversion options:
+ *
+ * - `pageSize`: string, page size, e.g. 'A4', 'Letter', etc.
+ * - `orientation`: string, page orientation: 'Portrait' or 'Landscape'.
+ * - `grayscale`: bool, whether PDF will be generated in grayscale.
+ * - `cover`: string, filename or URL which holds content for cover page.
+ * - `headerHtml`: string, filename or URL which holds content for pages header.
+ * - `footerHtml`: string, filename or URL which holds content for pages footer.
+ * - `coverContent`: string, HTML content for cover page.
+ * - `headerHtmlContent`: string, header HTML content.
+ * - `footerHtmlContent`: string, footer HTML content.
+ *
+ * Note: actual options list may vary depending on the version of 'wkhtmltopdf' you are using.
+ *
  * @see http://wkhtmltopdf.org/
  *
  * @author Paul Klimov <klimov.paul@gmail.com>
@@ -31,6 +46,22 @@ class Wkhtmltopdf extends BaseConverter
      */
     public $binPath = 'wkhtmltopdf';
 
+    /**
+     * @var string[] list of created temporary file names.
+     * @since 1.0.3
+     */
+    private $tmpFiles = [];
+
+
+    /**
+     * Destructor.
+     * Ensures temporary files are deleted.
+     * @since 1.0.3
+     */
+    public function __destruct()
+    {
+        $this->clearTmpFiles();
+    }
 
     /**
      * {@inheritdoc}
@@ -50,19 +81,29 @@ class Wkhtmltopdf extends BaseConverter
      */
     protected function convertFileInternal($sourceFileName, $outputFileName, $options)
     {
-        $command = $this->binPath;
-        foreach ($this->normalizeOptions($options) as $name => $value) {
-            $command .= $this->buildCommandOption($name, $value);
-        }
-        $command .= ' ' . escapeshellarg($sourceFileName) . ' ' . escapeshellarg($outputFileName);
-        $command .= ' 2>&1';
+        try {
+            $command = $this->binPath;
+            foreach ($this->normalizeOptions($options) as $name => $value) {
+                $command .= $this->buildCommandOption($name, $value);
+            }
+            $command .= ' ' . escapeshellarg($sourceFileName) . ' ' . escapeshellarg($outputFileName);
+            $command .= ' 2>&1';
 
-        $outputLines = [];
-        exec($command, $outputLines, $exitCode);
+            $outputLines = [];
+            exec($command, $outputLines, $exitCode);
 
-        if ($exitCode !== 0) {
-            throw new Exception("Unable to convert file '{$sourceFileName}': " . implode("\n", $outputLines));
+            if ($exitCode !== 0) {
+                throw new Exception("Unable to convert file '{$sourceFileName}': " . implode("\n", $outputLines));
+            }
+        } catch (\Exception $e) {
+            $this->clearTmpFiles();
+            throw $e;
+        } catch (\Throwable $e) {
+            $this->clearTmpFiles();
+            throw $e;
         }
+
+        $this->clearTmpFiles();
     }
 
     /**
@@ -70,22 +111,8 @@ class Wkhtmltopdf extends BaseConverter
      */
     protected function convertInternal($html, $outputFileName, $options)
     {
-        $tempPath = Yii::getAlias('@runtime/html2pdf');
-        FileHelper::createDirectory($tempPath);
-
-        $tempFileName = tempnam($tempPath, 'wkhtmltopdf');
-        $sourceFileName = $tempFileName . '.html'; // enforce '.html' extension to avoid 'Failed loading page' error
-        rename($tempFileName, $sourceFileName);
-        file_put_contents($sourceFileName, $html);
-
-        try {
-            $this->convertFileInternal($sourceFileName, $outputFileName, $options);
-        } catch (\Exception $e) {
-            unlink($sourceFileName);
-            throw $e;
-        }
-
-        unlink($sourceFileName);
+        $sourceFileName = $this->createTmpFile($html, 'html'); // enforce '.html' extension to avoid 'Failed loading page' error
+        $this->convertFileInternal($sourceFileName, $outputFileName, $options);
     }
 
     /**
@@ -103,6 +130,20 @@ class Wkhtmltopdf extends BaseConverter
             }
             $normalizedName = Inflector::camel2id($name);
             $result[$normalizedName] = $value;
+        }
+
+        $fileOptions = [
+            'header-html',
+            'footer-html',
+            'cover',
+        ];
+        foreach ($fileOptions as $fileOption) {
+            $contentOption = $fileOption . '-content';
+            if (isset($result[$contentOption])) {
+                // enforce '.html' extension to avoid 'Failed loading page' error
+                $result[$fileOption] = $this->createTmpFile($result[$contentOption], 'html');
+                unset($result[$contentOption]);
+            }
         }
 
         // make sure 'toc' and 'cover' options to be last, so global options will not mix with them
@@ -155,5 +196,60 @@ class Wkhtmltopdf extends BaseConverter
         }
 
         return $option . ' ' . escapeshellarg($value);
+    }
+
+    /**
+     * Returns path to directory for the temporary files storage.
+     * Directory will be created if it does not yet exist.
+     * @return string file path.
+     * @throws \yii\base\Exception if the directory could not be created.
+     * @since 1.0.3
+     */
+    protected function getTmpFilePath()
+    {
+        $tempPath = Yii::getAlias('@runtime/html2pdf');
+        FileHelper::createDirectory($tempPath);
+        return $tempPath;
+    }
+
+    /**
+     * @param string $content file content.
+     * @param null $extension file extension to be enforced.
+     * @return string generated file name.
+     * @throws Exception on failure.
+     * @since 1.0.3
+     */
+    protected function createTmpFile($content, $extension = null)
+    {
+        $tempFileName = tempnam($this->getTmpFilePath(), 'wkhtmltopdf');
+        if ($tempFileName === false) {
+            throw new Exception('Unable to create temporary file.');
+        }
+
+        if ($extension !== null) {
+            // sometimes enforcing of file extension, like '.html', is needed since 'wkhtmltopdf' is sensitive to it.
+            $tempFileNameWithExtension = $tempFileName . '.' . $extension;
+            rename($tempFileName, $tempFileNameWithExtension);
+            $tempFileName = $tempFileNameWithExtension;
+        }
+
+        file_put_contents($tempFileName, $content);
+
+        $this->tmpFiles[] = $tempFileName;
+        return $tempFileName;
+    }
+
+    /**
+     * Removes temporary files.
+     * @since 1.0.3
+     */
+    protected function clearTmpFiles()
+    {
+        foreach ($this->tmpFiles as $tmpFile) {
+            if (file_exists($tmpFile)) {
+                unlink($tmpFile);
+            }
+        }
+        $this->tmpFiles = [];
     }
 }

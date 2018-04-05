@@ -96,4 +96,21 @@ class WkhtmltopdfTest extends TestCase
 
         $this->assertTrue(file_exists($outputFileName));
     }
+
+    /**
+     * @depends testConvertFile
+     */
+    public function testContentOptions()
+    {
+        $converter = new Wkhtmltopdf();
+
+        $sourceFileName = dirname(__DIR__) . '/data/html/simple.html';
+        $outputFileName = $this->ensureTestFilePath() . '/output.pdf';
+
+        $converter->convertFile($sourceFileName, $outputFileName, [
+            'coverContent' => 'cover content',
+        ]);
+
+        $this->assertTrue(file_exists($outputFileName));
+    }
 }
