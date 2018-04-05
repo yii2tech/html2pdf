@@ -31,6 +31,10 @@ class Wkhtmltopdf extends BaseConverter
      */
     public $binPath = 'wkhtmltopdf';
 
+    /**
+     * @var array temporary html paths
+     */
+    protected $tempHtmlFiles = [];
 
     /**
      * {@inheritdoc}
@@ -70,6 +74,22 @@ class Wkhtmltopdf extends BaseConverter
      */
     protected function convertInternal($html, $outputFileName, $options)
     {
+        $sourceFileName = $this->createTempHtmlFile($html);
+
+        try {
+            $this->convertFileInternal($sourceFileName, $outputFileName, $options);
+        } finally {
+            $this->unlinkTempHtmlFiles();
+        }
+    }
+
+    /**
+     * Creates a temporary html file
+     * @param string $html the file content
+     * @return string the created file path
+     */
+    protected function createTempHtmlFile($html)
+    {
         $tempPath = Yii::getAlias('@runtime/html2pdf');
         FileHelper::createDirectory($tempPath);
 
@@ -78,14 +98,22 @@ class Wkhtmltopdf extends BaseConverter
         rename($tempFileName, $sourceFileName);
         file_put_contents($sourceFileName, $html);
 
-        try {
-            $this->convertFileInternal($sourceFileName, $outputFileName, $options);
-        } catch (\Exception $e) {
-            unlink($sourceFileName);
-            throw $e;
-        }
+        $this->tempHtmlFiles[] = $sourceFileName;
 
-        unlink($sourceFileName);
+        return $sourceFileName;
+    }
+
+    /**
+     * Unlink temporary html files
+     */
+    protected function unlinkTempHtmlFiles()
+    {
+        foreach ($this->tempHtmlFiles as $file) {
+            if (file_exists($file)) {
+                unlink($file);
+            }
+        }
+        $this->tempHtmlFiles = [];
     }
 
     /**
@@ -102,6 +130,12 @@ class Wkhtmltopdf extends BaseConverter
                 continue;
             }
             $normalizedName = Inflector::camel2id($name);
+            // Test if the option has HTML content and creates a temporary html file
+            if (in_array($normalizedName, ['header-html', 'footer-html', 'cover'])) {
+                if (!is_file($value) && !filter_var($value, FILTER_VALIDATE_URL)) {
+                    $value = $this->createTempHtmlFile($value);
+                }
+            }
             $result[$normalizedName] = $value;
         }
 
