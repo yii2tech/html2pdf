@@ -37,10 +37,18 @@ class Mpdf extends BaseConverter
         $pageSize = ArrayHelper::remove($options, 'pageSize', 'A4');
 
         if (class_exists('Mpdf\Mpdf')) {
-            $pdf = new \Mpdf\Mpdf([
+            $config = [
                 'mode' => $charset,
                 'format' => $pageSize,
-            ]);
+                'tempDir' => Yii::getAlias(ArrayHelper::remove($options, 'tempDir', '@runtime')),
+            ];
+
+            if (isset($options['fontDir'])) {
+                $config['fontDir'] = Yii::getAlias($options['fontDir']);
+                unset($options['fontDir']);
+            }
+
+            $pdf = new \Mpdf\Mpdf($config);
         } else {
             $pdf = new \mPDF($charset, $pageSize);
         }

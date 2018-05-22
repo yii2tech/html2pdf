@@ -1,10 +1,16 @@
 Yii 2 HTML to PDF conversion extension Change Log
 =================================================
 
+1.0.4 under development
+-----------------------
+
+- Bug #12: Fixed inability to setup 'tempDir' and 'fontDir' for `Mpdf` converter (klimov-paul)
+
+
 1.0.3, April 9, 2018
 --------------------
 
-- Enh #6: Options 'coverContent', 'headerHtmlContent' and 'footerHtmlContent' added tp `Wkhtmltopdf` (berosoboy, klimov-paul)
+- Enh #6: Options 'coverContent', 'headerHtmlContent' and 'footerHtmlContent' added to `Wkhtmltopdf` (berosoboy, klimov-paul)
 - Enh #8: 'wkhtmltopdf' command composition improved ensuring options 'cover' and 'toc' do not utilize global ones (klimov-paul)
 
 
