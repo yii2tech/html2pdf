@@ -1,36 +1,44 @@
 {
-    "name": "yii2tech/html2pdf",
-    "description": "Provides support for HTML to PDF and PHP to PDF conversion",
-    "keywords": ["yii2", "html2pdf", "php2pdf", "pdf", "convert", "conversion", "template"],
-    "type": "yii2-extension",
-    "license": "BSD-3-Clause",
-    "support": {
-        "issues": "https://github.com/yii2tech/html2pdf/issues",
-        "forum": "http://www.yiiframework.com/forum/",
-        "wiki": "https://github.com/yii2tech/html2pdf/wiki",
-        "source": "https://github.com/yii2tech/html2pdf"
-    },
-    "authors": [
-        {
-            "name": "Paul Klimov",
-            "email": "klimov.paul@gmail.com"
-        }
-    ],
-    "require": {
-        "yiisoft/yii2": "~2.0.13"
-    },
-    "repositories": [
-        {
-            "type": "composer",
-            "url": "https://asset-packagist.org"
-        }
-    ],
-    "autoload": {
-        "psr-4": { "yii2tech\\html2pdf\\": "src" }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
-        }
-    }
+	"name" : "yii2tech/html2pdf",
+	"description" : "Provides support for HTML to PDF and PHP to PDF conversion",
+	"keywords" : [
+		"yii2",
+		"html2pdf",
+		"php2pdf",
+		"pdf",
+		"convert",
+		"conversion",
+		"template"
+	],
+	"type" : "yii2-extension",
+	"license" : "BSD-3-Clause",
+	"support" : {
+		"issues" : "https://github.com/yii2tech/html2pdf/issues",
+		"forum" : "http://www.yiiframework.com/forum/",
+		"wiki" : "https://github.com/yii2tech/html2pdf/wiki",
+		"source" : "https://github.com/yii2tech/html2pdf"
+	},
+	"authors" : [{
+			"name" : "Paul Klimov",
+			"email" : "klimov.paul@gmail.com"
+		}
+	],
+	"require" : {
+		"yiisoft/yii2" : "~2.0.13"
+	},
+	"repositories" : [{
+			"type" : "composer",
+			"url" : "https://asset-packagist.org"
+		}
+	],
+	"autoload" : {
+		"psr-4" : {
+			"yii2tech\\html2pdf\\" : "src"
+		}
+	},
+	"extra" : {
+		"branch-alias" : {
+			"dev-master" : "1.0.x-dev"
+		}
+	}
 }

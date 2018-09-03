@@ -198,13 +198,14 @@ class Manager extends Component
      * @param array $params the parameters (name-value pairs) that will be extracted and made available in the view file.
      * @return TempFile converted PDF file representation.
      */
-    public function render($view, $params = [])
+    public function render($view, $params = [], $pdfOptions = [])
     {
         $template = new Template([
             'view' => $this->getView(),
             'viewPath' => $this->getViewPath(),
             'viewName' => $view,
             'layout' => $this->layout,
+            'pdfOptions' => $pdfOptions,
         ]);
         $htmlContent = $template->render($params);
 
