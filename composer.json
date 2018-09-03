@@ -1,5 +1,5 @@
 {
-	"name" : "troncz/html2pdf",
+	"name" : "yii2tech/html2pdf",
 	"description" : "Provides support for HTML to PDF and PHP to PDF conversion",
 	"keywords" : [
 		"yii2",
