@@ -103,6 +103,15 @@ class TempFile extends BaseObject
     }
 
     /**
+     * Gets content of this file.
+     * @return string file content.
+     */
+    public function getContent()
+    {
+        return file_get_contents($this->name);
+    }
+
+    /**
      * Prepares response for sending a file to the browser.
      * Note: this method works only while running web application.
      * @param string $name the file name shown to the user. If null, it will be determined from [[tempName]].
