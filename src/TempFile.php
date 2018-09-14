@@ -105,6 +105,7 @@ class TempFile extends BaseObject
     /**
      * Gets content of this file.
      * @return string file content.
+     * @since 1.0.4
      */
     public function getContent()
     {

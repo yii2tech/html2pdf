@@ -68,7 +68,8 @@ class TempFileTest extends TestCase
         $this->assertFalse(file_exists($fileName));
     }
 
-    public function testGetContent() {
+    public function testGetContent()
+    {
         $filePath = $this->ensureTestFilePath();
         $fileName = $filePath . '/test.txt';
         file_put_contents($fileName, 'test content');
