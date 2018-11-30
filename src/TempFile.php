@@ -95,7 +95,7 @@ class TempFile extends BaseObject
     public function delete()
     {
         if (!empty($this->name) && file_exists($this->name)) {
-            $result = unlink($this->name);
+            $result = FileHelper::unlink($this->name);
             $this->name = null;
             return $result;
         }
