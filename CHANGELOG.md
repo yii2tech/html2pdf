@@ -1,6 +1,11 @@
 Yii 2 HTML to PDF conversion extension Change Log
 =================================================
 
+1.0.5, December 18, 2018
+-------------------------
+
+- Bug: PHP Warning 'yii\base\ErrorException' with message 'unlink(C:\localhost\api\runtime/html2pdf\html2pdf5c0123789885b0.71556863.pdf): Permission denied' on Windows (AlexRas007)
+
 1.0.4, September 18, 2018
 -------------------------
 
