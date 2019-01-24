@@ -1,7 +1,7 @@
 Yii 2 HTML to PDF conversion extension Change Log
 =================================================
 
-1.0.5 under development
+1.0.5, January 24, 2019
 -----------------------
 
 - Bug #16: Fixed temporary file removal on Windows (AlexRas007)
