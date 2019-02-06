@@ -43,12 +43,13 @@ class Mpdf extends BaseConverter
                 'tempDir' => Yii::getAlias(ArrayHelper::remove($options, 'tempDir', '@runtime')),
             ];
 
+            $pdf = new \Mpdf\Mpdf($config);
+
             if (isset($options['fontDir'])) {
-                $config['fontDir'] = Yii::getAlias($options['fontDir']);
+                $pdf->AddFontDirectory(Yii::getAlias($options['fontDir']));
                 unset($options['fontDir']);
             }
 
-            $pdf = new \Mpdf\Mpdf($config);
         } else {
             $pdf = new \mPDF($charset, $pageSize);
         }
