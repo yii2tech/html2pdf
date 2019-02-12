@@ -57,7 +57,11 @@ class Mpdf extends BaseConverter
         foreach ($options as $name => $value) {
             $setter = 'Set' . $name;
             if (method_exists($pdf, $setter)) {
-                $pdf->$setter($value);
+                if (is_array($value)) {
+                    call_user_func_array([$pdf, $setter], $value);
+                } else {
+                    $pdf->$setter($value);
+                }
             } else {
                 $pdf->$name = $value;
             }
