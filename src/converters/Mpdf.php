@@ -44,11 +44,20 @@ class Mpdf extends BaseConverter
             ];
 
             if (isset($options['fontDir'])) {
-                $config['fontDir'] = Yii::getAlias($options['fontDir']);
-                unset($options['fontDir']);
+                if (is_array($options['fontDir'])) {
+                    $config['fontDir'] = array_map(['Yii', 'getAlias'], $config['fontDir']);
+                    unset($options['fontDir']);
+                } else {
+                    $options['fontDir'] = Yii::getAlias($options['fontDir']);
+                }
             }
 
             $pdf = new \Mpdf\Mpdf($config);
+
+            if (isset($options['fontDir'])) {
+                $pdf->AddFontDirectory($options['fontDir']);
+                unset($options['fontDir']);
+            }
         } else {
             $pdf = new \mPDF($charset, $pageSize);
         }
