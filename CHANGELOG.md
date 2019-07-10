@@ -1,8 +1,8 @@
 Yii 2 HTML to PDF conversion extension Change Log
 =================================================
 
-1.0.6 under development
------------------------
+1.0.6, July 10, 2019
+--------------------
 
 - Bug #17: Fixed inability to setup multiple 'fontDir' as array for `Mpdf` converter (klimov-paul)
 
