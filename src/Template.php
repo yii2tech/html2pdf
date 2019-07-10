@@ -12,7 +12,7 @@ use yii\base\ViewContextInterface;
 
 /**
  * Template represents particular PDF file view template.
- * Its instance will be available inside view file via [[\yii\base\View::$context]].
+ * Its instance will be available inside view file via {@see \yii\base\View::$context}.
  *
  * @see Manager
  *
@@ -33,7 +33,7 @@ class Template extends BaseObject implements ViewContextInterface
      * @var string|bool layout view name. This is the layout used to render HTML source.
      * The property can take the following values:
      *
-     * - a relative view name: a view file relative to [[viewPath]], e.g., 'layouts/main'.
+     * - a relative view name: a view file relative to {@see viewPath}, e.g., 'layouts/main'.
      * - a path alias: an absolute view file path specified as a path alias, e.g., '@app/pdf/layout'.
      * - a bool false: the layout is disabled.
      */

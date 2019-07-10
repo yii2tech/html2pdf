@@ -31,7 +31,7 @@ class WkhtmltopdfTest extends TestCase
     // Tests :
 
     /**
-     * Data provider for [[testNormalizeOptions()]].
+     * Data provider for {@see testNormalizeOptions()}.
      * @return array test data
      */
     public function dataProviderNormalizeOptions()

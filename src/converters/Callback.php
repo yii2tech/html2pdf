@@ -28,7 +28,7 @@ class Callback extends BaseConverter
      * function (string $htmlContent, string $outputFileName, array $options) {...}
      * ```
      *
-     * This field can be omitted in case [[fileCallback]] is set.
+     * This field can be omitted in case {@see fileCallback} is set.
      */
     public $callback;
     /**
@@ -39,7 +39,7 @@ class Callback extends BaseConverter
      * function (string $sourceFileName, string $outputFileName, array $options) {...}
      * ```
      *
-     * This field can be omitted in case [[callback]] is set.
+     * This field can be omitted in case {@see callback} is set.
      */
     public $fileCallback;
 

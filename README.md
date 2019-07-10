@@ -10,8 +10,8 @@ This extension provides basic support for HTML to PDF and PHP to PDF conversion.
 
 For license information check the [LICENSE](LICENSE.md)-file.
 
-[![Latest Stable Version](https://poser.pugx.org/yii2tech/html2pdf/v/stable.png)](https://packagist.org/packages/yii2tech/html2pdf)
-[![Total Downloads](https://poser.pugx.org/yii2tech/html2pdf/downloads.png)](https://packagist.org/packages/yii2tech/html2pdf)
+[![Latest Stable Version](https://img.shields.io/packagist/v/yii2tech/html2pdf.svg)](https://packagist.org/packages/yii2tech/html2pdf)
+[![Total Downloads](https://img.shields.io/packagist/dt/yii2tech/html2pdf.svg)](https://packagist.org/packages/yii2tech/html2pdf)
 [![Build Status](https://travis-ci.org/yii2tech/html2pdf.svg?branch=master)](https://travis-ci.org/yii2tech/html2pdf)
 
 

@@ -18,7 +18,7 @@ use yii2tech\html2pdf\BaseConverter;
  *
  * This converter requires `wkhtmltopdf` utility installed and being available via OS shell.
  *
- * Conversion options are converted into command line options, using [[Inflector::camel2id()]].
+ * Conversion options are converted into command line options, using {@see Inflector::camel2id()}.
  * Available conversion options:
  *
  * - `pageSize`: string, page size, e.g. 'A4', 'Letter', etc.
