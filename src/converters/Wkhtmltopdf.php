@@ -41,7 +41,7 @@ use yii2tech\html2pdf\BaseConverter;
 class Wkhtmltopdf extends BaseConverter
 {
     /**
-     * @var string path to the 'wkhtmltopdf' command, for example: '/usr/local/bin/wkhtmltopdf'.
+     * @var string path to the 'wkhtmltopdf' command, for example: '/usr/local/bin/wkhtmltopdf'. It supports Yii aliases as well.
      * Default is 'wkhtmltopdf' assuming 'wkhtmltopdf' command is available in OS shell.
      */
     public $binPath = 'wkhtmltopdf';
@@ -82,7 +82,7 @@ class Wkhtmltopdf extends BaseConverter
     protected function convertFileInternal($sourceFileName, $outputFileName, $options)
     {
         try {
-            $command = $this->binPath;
+            $command = Yii::getAlias($this->binPath);
             foreach ($this->normalizeOptions($options) as $name => $value) {
                 $command .= $this->buildCommandOption($name, $value);
             }
