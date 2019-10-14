@@ -42,6 +42,7 @@ class Wkhtmltopdf extends BaseConverter
 {
     /**
      * @var string path to the 'wkhtmltopdf' command, for example: '/usr/local/bin/wkhtmltopdf'.
+     * Since 1.0.7 Yii alias can be used here, for example: '@app/bin/wkhtmltopdf'.
      * Default is 'wkhtmltopdf' assuming 'wkhtmltopdf' command is available in OS shell.
      */
     public $binPath = 'wkhtmltopdf';
@@ -82,7 +83,7 @@ class Wkhtmltopdf extends BaseConverter
     protected function convertFileInternal($sourceFileName, $outputFileName, $options)
     {
         try {
-            $command = $this->binPath;
+            $command = Yii::getAlias($this->binPath);
             foreach ($this->normalizeOptions($options) as $name => $value) {
                 $command .= $this->buildCommandOption($name, $value);
             }

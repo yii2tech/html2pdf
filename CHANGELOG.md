@@ -1,6 +1,12 @@
 Yii 2 HTML to PDF conversion extension Change Log
 =================================================
 
+1.0.7 Under Development
+-----------------------
+
+- Enh #21: Added support for Yii alias at `Wkhtmltopdf::$binPath` (berosoboy)
+
+
 1.0.6, July 10, 2019
 --------------------
 
