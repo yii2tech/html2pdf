@@ -44,10 +44,12 @@ Usage
 This extension provides support for HTML to PDF and PHP to PDF conversion. It allows composition of the PDF files
 from HTML and via rendering PHP templates.
 
-Extension functionality is aggregated into [[\yii2tech\html2pdf\Manager]] application component.
+Extension functionality is aggregated into `\yii2tech\html2pdf\Manager` application component.
 Application configuration example:
 
 ```php
+<?php
+
 return [
     'components' => [
         'html2pdf' => [
@@ -60,9 +62,11 @@ return [
 ];
 ```
 
-For the simple conversion you can use [[\yii2tech\html2pdf\Manager::convert()]] and [[\yii2tech\html2pdf\Manager::convertFile()]] methods:
+For the simple conversion you can use `\yii2tech\html2pdf\Manager::convert()` and `\yii2tech\html2pdf\Manager::convertFile()` methods:
 
 ```php
+<?php
+
 $html = <<<HTML
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -86,15 +90,15 @@ Yii::$app->html2pdf
 ```
 
 The actual conversion result determined by particular converter used.
-You may use [[\yii2tech\html2pdf\Manager::$converter]] property for the converter setup.
+You may use `\yii2tech\html2pdf\Manager::$converter` property for the converter setup.
 
 Several built-in converters are provided:
 
- - [[yii2tech\html2pdf\converters\Wkhtmltopdf]] - uses [wkhtmltopdf](http://wkhtmltopdf.org/) utility for the conversion.
- - [[yii2tech\html2pdf\converters\Dompdf]] - uses [dompdf](https://github.com/dompdf/dompdf) library for the conversion.
- - [[yii2tech\html2pdf\converters\Mpdf]] - uses [mpdf](https://github.com/mpdf/mpdf) library for the conversion.
- - [[yii2tech\html2pdf\converters\Tcpdf]] - uses [TCPDF](http://www.tcpdf.org) library for the conversion.
- - [[yii2tech\html2pdf\converters\Callback]] - uses a custom PHP callback for the conversion.
+ - [yii2tech\html2pdf\converters\Wkhtmltopdf](src/converters/Wkhtmltopdf.php) - uses [wkhtmltopdf](http://wkhtmltopdf.org/) utility for the conversion.
+ - [yii2tech\html2pdf\converters\Dompdf](src/converters/Dompdf.php) - uses [dompdf](https://github.com/dompdf/dompdf) library for the conversion.
+ - [yii2tech\html2pdf\converters\Mpdf](src/converters/Mpdf.php) - uses [mpdf](https://github.com/mpdf/mpdf) library for the conversion.
+ - [yii2tech\html2pdf\converters\Tcpdf](src/converters/Tcpdf.php) - uses [TCPDF](http://www.tcpdf.org) library for the conversion.
+ - [yii2tech\html2pdf\converters\Callback](src/converters/Callback.php) - uses a custom PHP callback for the conversion.
 
 **Heads up!** Most of the provided converters require additional software been installed, which is not provided by
 his extension by default. You'll have to install it manually, once you decide, which converter you will use.
@@ -103,14 +107,18 @@ Please refer to the particular converter class for more details.
 You may specify conversion options via second argument of the `convert()` or `convertFile()` method:
 
 ```php
+<?php
+
 Yii::$app->html2pdf
     ->convertFile('/path/to/source.html', ['pageSize' => 'A4'])
     ->saveAs('/path/to/output.pdf');
 ```
 
-You may setup default conversion options at the [[\yii2tech\html2pdf\Manager]] level:
+You may setup default conversion options at the `\yii2tech\html2pdf\Manager` level:
 
 ```php
+<?php
+
 return [
     'components' => [
         'html2pdf' => [
@@ -135,17 +143,19 @@ return [
 
 You may create PDF files rendering PHP templates (view files), which composes HTML output.
 Such files are processed as regular view files, allowing passing params and layout wrapping.
-Method [[\yii2tech\html2pdf\Manager::render()]] used for this:
+Method `\yii2tech\html2pdf\Manager::render()` used for this:
 
 ```php
+<?php
+
 Yii::$app->html2pdf
     ->render('invoice', ['user' => Yii::$app->user->identity])
     ->saveAs('/path/to/output.pdf');
 ```
 
-You may use a shared layout for the templates, which can be setup via [[\yii2tech\html2pdf\Manager::$layout]].
+You may use a shared layout for the templates, which can be setup via `\yii2tech\html2pdf\Manager::$layout`.
 
-During each rendering view is working in context of [[\yii2tech\html2pdf\Template]] object, which can be used to adjust
+During each rendering view is working in context of `\yii2tech\html2pdf\Template` object, which can be used to adjust
 layout or PDF conversion options inside view file:
 
 ```php

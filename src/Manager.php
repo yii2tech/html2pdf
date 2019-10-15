@@ -63,7 +63,7 @@ class Manager extends Component
     public $layout = 'layouts/main';
 
     /**
-     * @var string path ro the directory containing view files.
+     * @var string path to the directory containing view files.
      */
     private $_viewPath;
     /**
