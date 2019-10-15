@@ -21,7 +21,6 @@ cache:
 
 install:
   - travis_retry composer install --prefer-dist --no-interaction
-  - travis_retry composer require "phpunit/phpunit:4.8.27|^5.0|^6.0" --update-with-dependencies
 
 script:
   - vendor/bin/phpunit $PHPUNIT_FLAGS
